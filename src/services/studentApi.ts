@@ -48,18 +48,3 @@ export const removeStudent = async (id: number): Promise<void> => {
     throw new Error(`Failed to delete student: ${response.statusText}`);
   }
 };
-
-// Seed initial sample students into PostgreSQL one by one
-export const seedInitialStudents = async (initialStudents: Student[]): Promise<Student[]> => {
-  const savedList: Student[] = [];
-  for (const student of initialStudents) {
-    const { id, ...studentPayload } = student;
-    try {
-      const saved = await createStudent(studentPayload);
-      savedList.push(saved);
-    } catch (e) {
-      console.warn('Skipping existing student during seeding:', student.admissionNumber);
-    }
-  }
-  return savedList;
-};

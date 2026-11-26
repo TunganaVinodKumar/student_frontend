@@ -7,13 +7,11 @@ import { StudentDetailsModal } from './components/StudentDetailsModal';
 import { StudentRegistration } from './components/StudentRegistration';
 import { Toast } from './components/Toast';
 import type { ToastMessage } from './components/Toast';
-import { INITIAL_STUDENTS } from './data/mockStudents';
 import type { Student } from './types/student';
 import { 
   getStudents, 
   createStudent, 
-  removeStudent, 
-  seedInitialStudents 
+  removeStudent 
 } from './services/studentApi';
 import './App.css';
 
@@ -94,38 +92,6 @@ export const App: React.FC = () => {
     }
   };
 
-  // Seed initial 10 students into PostgreSQL database
-  const handleSeedDatabase = async () => {
-    setIsLoading(true);
-    try {
-      setToast({
-        id: String(Date.now()),
-        type: 'info',
-        title: 'Seeding PostgreSQL...',
-        message: 'Saving 10 demo student records into your database...'
-      });
-
-      const seeded = await seedInitialStudents(INITIAL_STUDENTS);
-      setStudents(seeded);
-
-      setToast({
-        id: String(Date.now()),
-        type: 'success',
-        title: 'Database Populated!',
-        message: `${seeded.length} demo students have been saved directly into PostgreSQL.`
-      });
-    } catch (err: any) {
-      setToast({
-        id: String(Date.now()),
-        type: 'error',
-        title: 'Seeding Failed',
-        message: err.message || 'Could not seed database'
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="app-layout">
       {/* Sidebar Navigation */}
@@ -159,7 +125,6 @@ export const App: React.FC = () => {
               onDeleteStudent={handleDeleteStudent}
               onNavigateToRegister={() => setActiveTab('register')}
               onRefresh={loadStudents}
-              onSeedDatabase={handleSeedDatabase}
               isLoading={isLoading}
             />
           )}

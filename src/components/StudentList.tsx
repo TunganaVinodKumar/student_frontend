@@ -8,8 +8,7 @@ import {
   UserPlus, 
   Mail, 
   Phone, 
-  GraduationCap,
-  Sparkles
+  GraduationCap
 } from 'lucide-react';
 import type { Student } from '../types/student';
 
@@ -19,7 +18,6 @@ interface StudentListProps {
   onDeleteStudent: (id: number) => void;
   onNavigateToRegister: () => void;
   onRefresh?: () => void;
-  onSeedDatabase?: () => void;
   isLoading?: boolean;
 }
 
@@ -29,7 +27,6 @@ export const StudentList: React.FC<StudentListProps> = ({
   onDeleteStudent,
   onNavigateToRegister,
   onRefresh,
-  onSeedDatabase,
   isLoading = false
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -119,18 +116,6 @@ export const StudentList: React.FC<StudentListProps> = ({
 
           {/* Action Buttons */}
           <div className="list-action-buttons">
-            {onSeedDatabase && students.length === 0 && (
-              <button 
-                className="btn btn-secondary-subtle" 
-                onClick={onSeedDatabase}
-                title="Populate PostgreSQL with 10 sample students"
-                disabled={isLoading}
-              >
-                <Sparkles size={16} className="text-amber" />
-                <span>Seed 10 Demo Students</span>
-              </button>
-            )}
-
             <button 
               className="btn btn-outline" 
               onClick={onRefresh}
@@ -177,7 +162,7 @@ export const StudentList: React.FC<StudentListProps> = ({
               ? 'No students matched your active search filters. Try clearing filters.'
               : 'The PostgreSQL database currently has 0 student records.'}
           </p>
-          <div className="empty-state-actions" style={{ display: 'flex', gap: '12px' }}>
+          <div className="empty-state-actions">
             {(searchTerm || selectedDept !== 'ALL' || selectedYear !== 'ALL') ? (
               <button 
                 className="btn btn-secondary" 
@@ -186,16 +171,9 @@ export const StudentList: React.FC<StudentListProps> = ({
                 Clear All Filters
               </button>
             ) : (
-              <>
-                {onSeedDatabase && (
-                  <button className="btn btn-secondary-subtle" onClick={onSeedDatabase}>
-                    <Sparkles size={16} /> Load 10 Demo Students into Database
-                  </button>
-                )}
-                <button className="btn btn-primary" onClick={onNavigateToRegister}>
-                  <UserPlus size={16} /> Register First Student
-                </button>
-              </>
+              <button className="btn btn-primary" onClick={onNavigateToRegister}>
+                <UserPlus size={16} /> Register First Student
+              </button>
             )}
           </div>
         </div>
