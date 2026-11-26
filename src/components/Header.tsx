@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, totalStudents }) => {
             {activeTab === 'register' && 'New Student Registration'}
           </h1>
           <p className="page-subtitle">
-            Sri Vaatsalya Institute of Technology & Engineering • ERP Portal
+            College Management
           </p>
         </div>
       </div>

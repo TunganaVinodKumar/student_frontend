@@ -26,7 +26,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <GraduationCap className="brand-icon" size={28} />
         </div>
         <div className="brand-text">
-          <h2 className="brand-name">Vaatsalya ERP</h2>
+          <h2 className="brand-name">College</h2>
           <span className="brand-tagline">Student Information System</span>
         </div>
       </div>
