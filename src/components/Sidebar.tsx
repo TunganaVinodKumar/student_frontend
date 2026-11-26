@@ -3,9 +3,7 @@ import {
   LayoutDashboard, 
   Users, 
   UserPlus, 
-  GraduationCap, 
-  BookOpen, 
-  Settings
+  GraduationCap
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -58,18 +56,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <UserPlus size={20} />
           <span className="nav-label">Registration</span>
         </button>
-
-        <div className="nav-section-label">ACADEMICS (COMING SOON)</div>
-
-        <div className="nav-item disabled">
-          <BookOpen size={20} />
-          <span className="nav-label">Courses & Exams</span>
-        </div>
-
-        <div className="nav-item disabled">
-          <Settings size={20} />
-          <span className="nav-label">Settings</span>
-        </div>
       </nav>
 
       <div className="sidebar-footer">
