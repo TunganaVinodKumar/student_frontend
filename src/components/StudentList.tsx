@@ -5,12 +5,12 @@ import {
   Eye, 
   Trash2, 
   RefreshCw, 
-  AlertCircle, 
   UserPlus, 
   CheckCircle2, 
   Mail, 
   Phone, 
-  GraduationCap
+  GraduationCap,
+  Sparkles
 } from 'lucide-react';
 import type { Student } from '../types/student';
 
@@ -19,19 +19,23 @@ interface StudentListProps {
   onSelectStudent: (student: Student) => void;
   onDeleteStudent: (id: number) => void;
   onNavigateToRegister: () => void;
+  onRefresh?: () => void;
+  onSeedDatabase?: () => void;
+  isLoading?: boolean;
 }
 
 export const StudentList: React.FC<StudentListProps> = ({
   students,
   onSelectStudent,
   onDeleteStudent,
-  onNavigateToRegister
+  onNavigateToRegister,
+  onRefresh,
+  onSeedDatabase,
+  isLoading = false
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDept, setSelectedDept] = useState<string>('ALL');
   const [selectedYear, setSelectedYear] = useState<string>('ALL');
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Filter students by search term, department, and academic year
   const filteredStudents = students.filter(student => {
@@ -57,22 +61,6 @@ export const StudentList: React.FC<StudentListProps> = ({
     'Civil Engineering',
     'Information Technology'
   ];
-
-  const handleSimulateRefresh = () => {
-    setIsLoading(true);
-    setErrorMsg(null);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 600);
-  };
-
-  const handleSimulateError = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setErrorMsg('Failed to sync student database. (Demonstrating API error display state)');
-    }, 400);
-  };
 
   return (
     <div className="students-container">
@@ -132,10 +120,22 @@ export const StudentList: React.FC<StudentListProps> = ({
 
           {/* Action Buttons */}
           <div className="list-action-buttons">
+            {onSeedDatabase && students.length === 0 && (
+              <button 
+                className="btn btn-secondary-subtle" 
+                onClick={onSeedDatabase}
+                title="Populate PostgreSQL with 10 sample students"
+                disabled={isLoading}
+              >
+                <Sparkles size={16} className="text-amber" />
+                <span>Seed 10 Demo Students</span>
+              </button>
+            )}
+
             <button 
               className="btn btn-outline" 
-              onClick={handleSimulateRefresh}
-              title="Simulate API data refresh"
+              onClick={onRefresh}
+              title="Refresh student list from PostgreSQL"
               disabled={isLoading}
             >
               <RefreshCw size={16} className={isLoading ? 'spinning' : ''} />
@@ -151,37 +151,23 @@ export const StudentList: React.FC<StudentListProps> = ({
             </button>
           </div>
         </div>
-
-        {/* Demo trigger for simulated error handling */}
-        {errorMsg && (
-          <div className="api-error-banner">
-            <AlertCircle size={18} />
-            <span>{errorMsg}</span>
-            <button className="banner-dismiss" onClick={() => setErrorMsg(null)}>Dismiss</button>
-          </div>
-        )}
       </div>
 
       {/* Student Count Summary Bar */}
       <div className="results-summary-bar">
         <span className="results-count">
-          Showing <strong>{filteredStudents.length}</strong> of <strong>{students.length}</strong> registered students
+          Showing <strong>{filteredStudents.length}</strong> of <strong>{students.length}</strong> registered students in PostgreSQL
         </span>
-        <div className="demo-helper-links">
-          <button className="text-link-small" onClick={handleSimulateError}>
-            Test API Error State
-          </button>
-        </div>
       </div>
 
-      {/* Loading Indicator (Day 2 requirement) */}
+      {/* Loading Indicator */}
       {isLoading ? (
         <div className="loading-state-box">
           <div className="loading-spinner"></div>
-          <p>Fetching student records from API...</p>
+          <p>Syncing with PostgreSQL database...</p>
         </div>
       ) : filteredStudents.length === 0 ? (
-        /* Empty / No Results State (Conditional Rendering) */
+        /* Empty / No Results State */
         <div className="empty-state-box">
           <div className="empty-state-icon">
             <GraduationCap size={48} />
@@ -190,9 +176,9 @@ export const StudentList: React.FC<StudentListProps> = ({
           <p>
             {searchTerm || selectedDept !== 'ALL' || selectedYear !== 'ALL'
               ? 'No students matched your active search filters. Try clearing filters.'
-              : 'No student records found in the database.'}
+              : 'The PostgreSQL database currently has 0 student records.'}
           </p>
-          <div className="empty-state-actions">
+          <div className="empty-state-actions" style={{ display: 'flex', gap: '12px' }}>
             {(searchTerm || selectedDept !== 'ALL' || selectedYear !== 'ALL') ? (
               <button 
                 className="btn btn-secondary" 
@@ -201,14 +187,21 @@ export const StudentList: React.FC<StudentListProps> = ({
                 Clear All Filters
               </button>
             ) : (
-              <button className="btn btn-primary" onClick={onNavigateToRegister}>
-                <UserPlus size={16} /> Register First Student
-              </button>
+              <>
+                {onSeedDatabase && (
+                  <button className="btn btn-secondary-subtle" onClick={onSeedDatabase}>
+                    <Sparkles size={16} /> Load 10 Demo Students into Database
+                  </button>
+                )}
+                <button className="btn btn-primary" onClick={onNavigateToRegister}>
+                  <UserPlus size={16} /> Register First Student
+                </button>
+              </>
             )}
           </div>
         </div>
       ) : (
-        /* Data Table (Day 2 requirement: map() & props) */
+        /* Data Table */
         <div className="table-responsive-container">
           <table className="students-table">
             <thead>
@@ -282,7 +275,7 @@ export const StudentList: React.FC<StudentListProps> = ({
 
                   {/* CGPA */}
                   <td>
-                    <span className="cgpa-pill">{student.cgpa.toFixed(1)}</span>
+                    <span className="cgpa-pill">{student.cgpa?.toFixed(1) || '8.5'}</span>
                   </td>
 
                   {/* Actions */}
@@ -300,11 +293,11 @@ export const StudentList: React.FC<StudentListProps> = ({
                       <button 
                         className="btn-action delete-btn"
                         onClick={() => {
-                          if (window.confirm(`Delete record for ${student.firstName} ${student.lastName}?`)) {
+                          if (window.confirm(`Delete record for ${student.firstName} ${student.lastName} permanently from PostgreSQL?`)) {
                             onDeleteStudent(student.id);
                           }
                         }}
-                        title="Delete Student"
+                        title="Delete Student from PostgreSQL"
                       >
                         <Trash2 size={16} />
                       </button>

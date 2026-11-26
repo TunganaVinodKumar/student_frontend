@@ -10,7 +10,7 @@ import type { Student, StudentFormData, Department, AcademicYear, Gender } from 
 
 interface StudentRegistrationProps {
   existingStudents: Student[];
-  onAddStudent: (student: Student) => void;
+  onAddStudent: (student: Omit<Student, 'id'>) => Promise<boolean | void> | void;
   onNavigateToStudents: () => void;
 }
 
@@ -170,8 +170,8 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  // Form Submit Handler (Day 3 requirement: onSubmit, prevent duplicate submissions)
-  const handleSubmit = (e: React.FormEvent) => {
+  // Form Submit Handler
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -182,21 +182,20 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
 
     setIsSubmitting(true);
 
-    // Simulate API network call delay (like calling Spring Boot POST /api/students)
-    setTimeout(() => {
-      const newStudent: Student = {
-        id: Date.now(),
+    try {
+      await onAddStudent({
         ...formData,
         status: 'Active',
         cgpa: 8.5,
         joinedDate: new Date().toISOString().split('T')[0]
-      };
-
-      onAddStudent(newStudent);
-      setIsSubmitting(false);
+      });
       setFormData(INITIAL_FORM_DATA);
       setErrors({});
-    }, 700);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const departments: Department[] = [
