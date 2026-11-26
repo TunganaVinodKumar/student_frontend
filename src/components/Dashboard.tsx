@@ -60,11 +60,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           <div className="banner-actions">
             <button className="btn btn-primary" onClick={onNavigateToRegister}>
               <PlusCircle size={18} />
-              <span>Register New Student (Day 3)</span>
-            </button>
-            <button className="btn btn-secondary" onClick={onNavigateToStudents}>
-              <Users size={18} />
-              <span>Explore Student Directory (Day 2)</span>
+              <span>Register New Student</span>
             </button>
           </div>
         </div>

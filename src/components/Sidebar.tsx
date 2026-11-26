@@ -57,7 +57,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           <UserPlus size={20} />
           <span className="nav-label">Registration</span>
-          <span className="nav-pill-new">Day 3</span>
         </button>
 
         <div className="nav-section-label">ACADEMICS (COMING SOON)</div>
