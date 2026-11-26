@@ -47,7 +47,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onClick={() => setActiveTab('students')}
         >
           <Users size={20} />
-          <span className="nav-label">Student Directory</span>
+          <span className="nav-label">All Students</span>
           <span className="nav-count-badge">{studentCount}</span>
         </button>
 

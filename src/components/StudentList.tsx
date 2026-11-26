@@ -66,6 +66,14 @@ export const StudentList: React.FC<StudentListProps> = ({
     }, 600);
   };
 
+  const handleSimulateError = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setErrorMsg('Failed to sync student database. (Demonstrating API error display state)');
+    }, 400);
+  };
+
   return (
     <div className="students-container">
       {/* Top Action & Search Bar */}
@@ -159,6 +167,11 @@ export const StudentList: React.FC<StudentListProps> = ({
         <span className="results-count">
           Showing <strong>{filteredStudents.length}</strong> of <strong>{students.length}</strong> registered students
         </span>
+        <div className="demo-helper-links">
+          <button className="text-link-small" onClick={handleSimulateError}>
+            Test API Error State
+          </button>
+        </div>
       </div>
 
       {/* Loading Indicator (Day 2 requirement) */}
@@ -177,7 +190,7 @@ export const StudentList: React.FC<StudentListProps> = ({
           <p>
             {searchTerm || selectedDept !== 'ALL' || selectedYear !== 'ALL'
               ? 'No students matched your active search filters. Try clearing filters.'
-              : 'The student directory is currently empty.'}
+              : 'No student records found in the database.'}
           </p>
           <div className="empty-state-actions">
             {(searchTerm || selectedDept !== 'ALL' || selectedYear !== 'ALL') ? (

@@ -12,7 +12,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab }) => {
         <div>
           <h1 className="page-title">
             {activeTab === 'dashboard' && 'Academic Dashboard'}
-            {activeTab === 'students' && 'Student Records Directory'}
+            {activeTab === 'students' && 'All Students'}
             {activeTab === 'register' && 'New Student Registration'}
           </h1>
           <p className="page-subtitle">
