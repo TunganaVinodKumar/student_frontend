@@ -42,8 +42,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
   const totalDepartments = Object.keys(departmentCounts).length;
 
-  // Recent 4 students
-  const recentStudents = [...students].slice(0, 4);
+  // Most recent students first (newest IDs at top)
+  const recentStudents = [...students].sort((a, b) => b.id - a.id).slice(0, 5);
 
   // Average CGPA
   const avgCgpa = (students.reduce((acc, s) => acc + s.cgpa, 0) / (students.length || 1)).toFixed(1);
