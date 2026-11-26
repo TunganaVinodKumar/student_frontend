@@ -38,6 +38,24 @@ export const createStudent = async (studentData: Omit<Student, 'id'> | StudentFo
   return response.json();
 };
 
+// Update existing student in PostgreSQL via Spring Boot PUT /api/students/{id}
+export const updateStudent = async (id: number, studentData: Partial<Student> | StudentFormData): Promise<Student> => {
+  const response = await fetch(`${API_BASE_URL}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(studentData),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || 'Failed to update student');
+  }
+
+  return response.json();
+};
+
 // Delete student permanently from PostgreSQL
 export const removeStudent = async (id: number): Promise<void> => {
   const response = await fetch(`${API_BASE_URL}/${id}`, {

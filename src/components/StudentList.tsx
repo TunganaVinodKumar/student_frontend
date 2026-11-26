@@ -3,6 +3,7 @@ import {
   Search, 
   Filter, 
   Eye, 
+  Pencil,
   Trash2, 
   RefreshCw, 
   UserPlus, 
@@ -15,6 +16,7 @@ import type { Student } from '../types/student';
 interface StudentListProps {
   students: Student[];
   onSelectStudent: (student: Student) => void;
+  onEditStudent: (student: Student) => void;
   onDeleteStudent: (id: number) => void;
   onNavigateToRegister: () => void;
   onRefresh?: () => void;
@@ -24,6 +26,7 @@ interface StudentListProps {
 export const StudentList: React.FC<StudentListProps> = ({
   students,
   onSelectStudent,
+  onEditStudent,
   onDeleteStudent,
   onNavigateToRegister,
   onRefresh,
@@ -254,8 +257,17 @@ export const StudentList: React.FC<StudentListProps> = ({
                         onClick={() => onSelectStudent(student)}
                         title="View Full Student Profile"
                       >
-                        <Eye size={16} />
+                        <Eye size={15} />
                         <span>View</span>
+                      </button>
+
+                      <button 
+                        className="btn-action edit-btn"
+                        onClick={() => onEditStudent(student)}
+                        title="Edit Student Information"
+                      >
+                        <Pencil size={15} />
+                        <span>Edit</span>
                       </button>
 
                       <button 
@@ -267,7 +279,7 @@ export const StudentList: React.FC<StudentListProps> = ({
                         }}
                         title="Delete Student from PostgreSQL"
                       >
-                        <Trash2 size={16} />
+                        <Trash2 size={15} />
                       </button>
                     </div>
                   </td>

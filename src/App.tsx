@@ -4,6 +4,7 @@ import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
 import { StudentList } from './components/StudentList';
 import { StudentDetailsModal } from './components/StudentDetailsModal';
+import { StudentEditModal } from './components/StudentEditModal';
 import { StudentRegistration } from './components/StudentRegistration';
 import { Toast } from './components/Toast';
 import type { ToastMessage } from './components/Toast';
@@ -11,6 +12,7 @@ import type { Student } from './types/student';
 import { 
   getStudents, 
   createStudent, 
+  updateStudent,
   removeStudent 
 } from './services/studentApi';
 import './App.css';
@@ -19,6 +21,7 @@ export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'students' | 'register'>('dashboard');
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [toast, setToast] = useState<ToastMessage | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -63,6 +66,28 @@ export const App: React.FC = () => {
         type: 'error',
         title: 'Registration Failed',
         message: err.message || 'Error saving student in database'
+      });
+      throw err;
+    }
+  };
+
+  // Edit / Update student (Calls Spring Boot PUT /api/students/{id} -> updates in PostgreSQL)
+  const handleUpdateStudent = async (id: number, updatedData: Partial<Student>) => {
+    try {
+      const savedStudent = await updateStudent(id, updatedData);
+      setStudents(prev => prev.map(s => s.id === id ? savedStudent : s));
+      setToast({
+        id: String(Date.now()),
+        type: 'success',
+        title: 'Student Profile Updated!',
+        message: `${savedStudent.firstName} ${savedStudent.lastName} (${savedStudent.admissionNumber}) updated successfully in PostgreSQL.`
+      });
+    } catch (err: any) {
+      setToast({
+        id: String(Date.now()),
+        type: 'error',
+        title: 'Update Failed',
+        message: err.message || 'Error updating student record in database'
       });
       throw err;
     }
@@ -122,6 +147,7 @@ export const App: React.FC = () => {
             <StudentList 
               students={students}
               onSelectStudent={(student) => setSelectedStudent(student)}
+              onEditStudent={(student) => setEditingStudent(student)}
               onDeleteStudent={handleDeleteStudent}
               onNavigateToRegister={() => setActiveTab('register')}
               onRefresh={loadStudents}
@@ -143,6 +169,14 @@ export const App: React.FC = () => {
       <StudentDetailsModal 
         student={selectedStudent} 
         onClose={() => setSelectedStudent(null)} 
+      />
+
+      {/* Student Edit Modal */}
+      <StudentEditModal 
+        student={editingStudent}
+        onClose={() => setEditingStudent(null)}
+        onSave={handleUpdateStudent}
+        existingStudents={students}
       />
 
       {/* System Toast Notification */}
