@@ -57,18 +57,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <span className="nav-label">Registration</span>
         </button>
       </nav>
-
-      <div className="sidebar-footer">
-        <div className="system-status-box">
-          <div className="status-header">
-            <span className="status-indicator-green"></span>
-            <span className="status-title">System Online</span>
-          </div>
-          <p className="status-desc">
-            Spring Boot: Ready for Integration
-          </p>
-        </div>
-      </div>
     </aside>
   );
 };
