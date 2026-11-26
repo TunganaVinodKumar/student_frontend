@@ -26,7 +26,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
   onViewStudentDetails
 }) => {
   const totalStudents = students.length;
-  const activeStudents = students.filter(s => s.status === 'Active').length;
 
   // Calculate department breakdown
   const departmentCounts: { [key: string]: number } = {};
@@ -92,12 +91,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
             <UserCheck size={24} />
           </div>
           <div className="stat-details">
-            <span className="stat-label">Active Students</span>
+            <span className="stat-label">Enrolled Batches</span>
             <div className="stat-value-group">
-              <span className="stat-value">{activeStudents}</span>
-              <span className="stat-badge">100% On-Campus</span>
+              <span className="stat-value">4 Years</span>
+              <span className="stat-badge">UG Program</span>
             </div>
-            <span className="stat-footnote">Regular attendance track</span>
+            <span className="stat-footnote">1st Year to 4th Year</span>
           </div>
         </div>
 

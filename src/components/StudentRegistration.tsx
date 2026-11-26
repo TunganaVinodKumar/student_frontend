@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { 
   UserPlus, 
-  Sparkles, 
   RotateCcw, 
   ShieldCheck, 
   Send
@@ -28,6 +27,7 @@ const INITIAL_FORM_DATA: StudentFormData = {
   section: 'A',
   rollNumber: '',
   admissionNumber: '',
+  cgpa: '',
   parentName: '',
   parentRelation: 'Father',
   parentPhone: '',
@@ -60,35 +60,6 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
     }
   };
 
-  // Pre-fill demo data for quick testing & demonstration
-  const handlePrefillDemo = () => {
-    const randomSuffix = Math.floor(100 + Math.random() * 900);
-    setFormData({
-      firstName: 'Sneha',
-      lastName: 'Chowdary',
-      email: `sneha.c${randomSuffix}@college.edu`,
-      phone: '9848022334',
-      dateOfBirth: '2005-08-19',
-      gender: 'Female',
-      bloodGroup: 'B+',
-      department: 'Computer Science & Engineering',
-      academicYear: '1st Year',
-      semester: 'Semester 1',
-      section: 'B',
-      rollNumber: `24CSE${randomSuffix}`,
-      admissionNumber: `ADM-2024-${randomSuffix}`,
-      parentName: 'Muralidhar Chowdary',
-      parentRelation: 'Father',
-      parentPhone: '9848099887',
-      parentOccupation: 'Business Executive',
-      address: 'Plot 45, Jubilee Hills Road No 10',
-      city: 'Hyderabad',
-      state: 'Telangana',
-      pincode: '500033'
-    });
-    setErrors({});
-  };
-
   // Comprehensive Form Validation (Day 3 requirement)
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof StudentFormData, string>> = {};
@@ -114,6 +85,16 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
       );
       if (isDuplicate) {
         newErrors.admissionNumber = 'Admission number already registered in database';
+      }
+    }
+
+    // CGPA Validation
+    if (!formData.cgpa.trim()) {
+      newErrors.cgpa = 'CGPA is required';
+    } else {
+      const cgpaVal = parseFloat(formData.cgpa);
+      if (isNaN(cgpaVal) || cgpaVal < 0 || cgpaVal > 10) {
+        newErrors.cgpa = 'CGPA must be between 0.0 and 10.0';
       }
     }
 
@@ -185,8 +166,7 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
     try {
       await onAddStudent({
         ...formData,
-        status: 'Active',
-        cgpa: 8.5,
+        cgpa: parseFloat(formData.cgpa) || 0,
         joinedDate: new Date().toISOString().split('T')[0]
       });
       setFormData(INITIAL_FORM_DATA);
@@ -233,21 +213,11 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
         <div className="reg-header-actions">
           <button 
             type="button" 
-            className="btn btn-secondary-subtle"
-            onClick={handlePrefillDemo}
-            title="Auto-fill sample data for rapid testing"
-          >
-            <Sparkles size={16} className="text-amber" />
-            <span>Pre-fill Demo Data</span>
-          </button>
-
-          <button 
-            type="button" 
             className="btn btn-outline"
             onClick={() => { setFormData(INITIAL_FORM_DATA); setErrors({}); }}
           >
             <RotateCcw size={16} />
-            <span>Reset</span>
+            <span>Reset Form</span>
           </button>
         </div>
       </div>
@@ -443,6 +413,24 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
                   <option key={sec} value={sec}>Section {sec}</option>
                 ))}
               </select>
+            </div>
+
+            {/* CGPA Input Field */}
+            <div className="form-group">
+              <label className="form-label required">Cumulative CGPA</label>
+              <input 
+                type="number" 
+                name="cgpa"
+                step="0.01"
+                min="0"
+                max="10"
+                placeholder="e.g. 8.75"
+                value={formData.cgpa}
+                onChange={handleChange}
+                className={`form-input ${errors.cgpa ? 'input-error' : ''}`}
+              />
+              {errors.cgpa && <span className="error-text">{errors.cgpa}</span>}
+              <span className="field-hint">Scale from 0.00 to 10.00</span>
             </div>
           </div>
         </div>

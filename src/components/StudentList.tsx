@@ -6,7 +6,6 @@ import {
   Trash2, 
   RefreshCw, 
   UserPlus, 
-  CheckCircle2, 
   Mail, 
   Phone, 
   GraduationCap,
@@ -210,7 +209,6 @@ export const StudentList: React.FC<StudentListProps> = ({
                 <th>Admission & Roll No</th>
                 <th>Department & Year</th>
                 <th>Contact Information</th>
-                <th>Status</th>
                 <th>CGPA</th>
                 <th className="text-right">Actions</th>
               </tr>
@@ -265,17 +263,9 @@ export const StudentList: React.FC<StudentListProps> = ({
                     </div>
                   </td>
 
-                  {/* Status */}
-                  <td>
-                    <span className={`status-badge status-${student.status.toLowerCase()}`}>
-                      <CheckCircle2 size={12} />
-                      {student.status}
-                    </span>
-                  </td>
-
                   {/* CGPA */}
                   <td>
-                    <span className="cgpa-pill">{student.cgpa?.toFixed(1) || '8.5'}</span>
+                    <span className="cgpa-pill">{student.cgpa?.toFixed(1) || '0.0'}</span>
                   </td>
 
                   {/* Actions */}

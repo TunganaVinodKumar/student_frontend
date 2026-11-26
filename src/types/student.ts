@@ -10,8 +10,6 @@ export type Department =
 
 export type AcademicYear = '1st Year' | '2nd Year' | '3rd Year' | '4th Year';
 
-export type StudentStatus = 'Active' | 'Graduated' | 'Suspended';
-
 export interface Student {
   id: number;
   admissionNumber: string;
@@ -35,7 +33,6 @@ export interface Student {
   city: string;
   state: string;
   pincode: string;
-  status: StudentStatus;
   cgpa: number;
   joinedDate: string;
 }
@@ -54,6 +51,7 @@ export interface StudentFormData {
   section: string;
   rollNumber: string;
   admissionNumber: string;
+  cgpa: string;
   parentName: string;
   parentRelation: string;
   parentPhone: string;
@@ -66,7 +64,6 @@ export interface StudentFormData {
 
 export interface DashboardStats {
   totalStudents: number;
-  activeStudents: number;
   departmentsCount: number;
   newAdmissionsCount: number;
   departmentDistribution: { name: string; count: number; percentage: number }[];

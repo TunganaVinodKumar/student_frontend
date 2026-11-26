@@ -24,7 +24,6 @@ export const INITIAL_STUDENTS: Student[] = [
     city: "Hyderabad",
     state: "Telangana",
     pincode: "500081",
-    status: "Active",
     cgpa: 8.9,
     joinedDate: "2023-08-10"
   },
@@ -51,7 +50,6 @@ export const INITIAL_STUDENTS: Student[] = [
     city: "Visakhapatnam",
     state: "Andhra Pradesh",
     pincode: "530002",
-    status: "Active",
     cgpa: 9.3,
     joinedDate: "2022-08-16"
   },
@@ -78,7 +76,6 @@ export const INITIAL_STUDENTS: Student[] = [
     city: "Bangalore",
     state: "Karnataka",
     pincode: "560001",
-    status: "Active",
     cgpa: 8.4,
     joinedDate: "2024-08-20"
   },
@@ -105,7 +102,6 @@ export const INITIAL_STUDENTS: Student[] = [
     city: "Chennai",
     state: "Tamil Nadu",
     pincode: "600040",
-    status: "Active",
     cgpa: 9.1,
     joinedDate: "2021-08-12"
   },
@@ -132,7 +128,6 @@ export const INITIAL_STUDENTS: Student[] = [
     city: "Ahmedabad",
     state: "Gujarat",
     pincode: "380015",
-    status: "Active",
     cgpa: 8.1,
     joinedDate: "2023-08-10"
   },
@@ -159,7 +154,6 @@ export const INITIAL_STUDENTS: Student[] = [
     city: "Kochi",
     state: "Kerala",
     pincode: "682001",
-    status: "Active",
     cgpa: 8.7,
     joinedDate: "2022-08-16"
   },
@@ -186,7 +180,6 @@ export const INITIAL_STUDENTS: Student[] = [
     city: "Hyderabad",
     state: "Telangana",
     pincode: "500081",
-    status: "Active",
     cgpa: 9.0,
     joinedDate: "2024-08-20"
   },
@@ -213,7 +206,6 @@ export const INITIAL_STUDENTS: Student[] = [
     city: "Pune",
     state: "Maharashtra",
     pincode: "411005",
-    status: "Active",
     cgpa: 8.6,
     joinedDate: "2023-08-10"
   },
@@ -240,7 +232,6 @@ export const INITIAL_STUDENTS: Student[] = [
     city: "Bangalore",
     state: "Karnataka",
     pincode: "560034",
-    status: "Active",
     cgpa: 9.4,
     joinedDate: "2021-08-12"
   },
@@ -267,7 +258,6 @@ export const INITIAL_STUDENTS: Student[] = [
     city: "Kolkata",
     state: "West Bengal",
     pincode: "700091",
-    status: "Active",
     cgpa: 8.8,
     joinedDate: "2022-08-16"
   }

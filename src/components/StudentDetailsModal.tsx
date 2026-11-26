@@ -34,7 +34,6 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
                 <h2 className="modal-student-name">
                   {student.firstName} {student.lastName}
                 </h2>
-                <span className="badge-pill-success">{student.status}</span>
               </div>
               <p className="modal-subtitle">
                 {student.admissionNumber} • Roll: {student.rollNumber} • {student.department}
