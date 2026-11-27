@@ -1,11 +1,11 @@
 import React from 'react';
-import { 
-  Eye, 
+import {
+  Eye,
   Pencil,
-  Trash2, 
-  UserPlus, 
-  Mail, 
-  Phone, 
+  Trash2,
+  UserPlus,
+  Mail,
+  Phone,
   GraduationCap
 } from 'lucide-react';
 import type { Student } from '../types/student';
@@ -16,7 +16,6 @@ interface StudentListProps {
   onEditStudent: (student: Student) => void;
   onDeleteStudent: (id: number) => void;
   onNavigateToRegister: () => void;
-  onRefresh?: () => void;
   isLoading?: boolean;
 }
 
@@ -33,7 +32,7 @@ export const StudentList: React.FC<StudentListProps> = ({
       {/* Student Count Summary Bar */}
       <div className="results-summary-bar">
         <span className="results-count">
-          Total <strong>{students.length}</strong> registered students in PostgreSQL
+          Total <strong>{students.length}</strong> registered students
         </span>
       </div>
 
@@ -114,7 +113,7 @@ export const StudentList: React.FC<StudentListProps> = ({
                   {/* Actions */}
                   <td>
                     <div className="action-buttons-group">
-                      <button 
+                      <button
                         className="btn-action view-btn"
                         onClick={() => onSelectStudent(student)}
                         title="View Full Student Profile"
@@ -123,7 +122,7 @@ export const StudentList: React.FC<StudentListProps> = ({
                         <span>View</span>
                       </button>
 
-                      <button 
+                      <button
                         className="btn-action edit-btn"
                         onClick={() => onEditStudent(student)}
                         title="Edit Student Information"
@@ -132,7 +131,7 @@ export const StudentList: React.FC<StudentListProps> = ({
                         <span>Edit</span>
                       </button>
 
-                      <button 
+                      <button
                         className="btn-action delete-btn"
                         onClick={() => {
                           if (window.confirm(`Delete record for ${student.firstName} ${student.lastName} permanently from PostgreSQL?`)) {

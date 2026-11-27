@@ -21,7 +21,6 @@ interface StudentEditModalProps {
   student: Student | null;
   onClose: () => void;
   onSave: (id: number, updatedData: Partial<Student>) => Promise<void>;
-  existingStudents: Student[];
 }
 
 export const StudentEditModal: React.FC<StudentEditModalProps> = ({

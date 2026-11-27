@@ -29,7 +29,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       <nav className="nav-menu">
-        <div className="nav-section-label">MAIN NAVIGATION</div>
 
         <button 
           className={`nav-item ${activeTab === 'students' ? 'active' : ''}`}

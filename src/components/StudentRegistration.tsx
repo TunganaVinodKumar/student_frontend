@@ -7,7 +7,6 @@ import {
 import type { Student, StudentFormData, Department, AcademicYear, Gender } from '../types/student';
 
 interface StudentRegistrationProps {
-  existingStudents: Student[];
   onAddStudent: (student: Omit<Student, 'id'>) => Promise<boolean | void> | void;
   onNavigateToStudents: () => void;
 }

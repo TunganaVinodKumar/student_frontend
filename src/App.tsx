@@ -140,14 +140,12 @@ export const App: React.FC = () => {
               onEditStudent={(student) => setEditingStudent(student)}
               onDeleteStudent={handleDeleteStudent}
               onNavigateToRegister={() => setActiveTab('register')}
-              onRefresh={loadStudents}
               isLoading={isLoading}
             />
           )}
 
           {activeTab === 'register' && (
             <StudentRegistration 
-              existingStudents={students}
               onAddStudent={handleAddStudent}
               onNavigateToStudents={() => setActiveTab('students')}
             />
@@ -166,7 +164,6 @@ export const App: React.FC = () => {
         student={editingStudent}
         onClose={() => setEditingStudent(null)}
         onSave={handleUpdateStudent}
-        existingStudents={students}
       />
 
       {/* System Toast Notification */}
