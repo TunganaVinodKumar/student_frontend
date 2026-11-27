@@ -22,7 +22,6 @@ export interface Student {
   academicYear: AcademicYear;
   parentName: string;
   parentRelation: string;
-  joinedDate: string;
 }
 
 export interface StudentFormData {

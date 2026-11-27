@@ -79,10 +79,6 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
                   <span className="info-label">Gender:</span>
                   <span className="info-value">{student.gender}</span>
                 </div>
-                <div className="info-row">
-                  <span className="info-label">Enrollment Date:</span>
-                  <span className="info-value">{student.joinedDate}</span>
-                </div>
               </div>
             </div>
 

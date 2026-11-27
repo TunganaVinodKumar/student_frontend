@@ -112,8 +112,7 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
         department: formData.department,
         academicYear: formData.academicYear,
         parentName: formData.parentName.trim(),
-        parentRelation: formData.parentRelation,
-        joinedDate: new Date().toISOString().split('T')[0]
+        parentRelation: formData.parentRelation
       });
       setFormData(INITIAL_FORM_DATA);
       setErrors({});
