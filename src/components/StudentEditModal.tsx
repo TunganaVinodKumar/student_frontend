@@ -27,8 +27,7 @@ interface StudentEditModalProps {
 export const StudentEditModal: React.FC<StudentEditModalProps> = ({
   student,
   onClose,
-  onSave,
-  existingStudents
+  onSave
 }) => {
   const [activeTab, setActiveTab] = useState<'academic' | 'personal' | 'contact'>('academic');
   const [formData, setFormData] = useState<StudentFormData>({
@@ -38,22 +37,11 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
     phone: '',
     dateOfBirth: '',
     gender: 'Male',
-    bloodGroup: 'O+',
     department: 'Computer Science & Engineering',
     academicYear: '1st Year',
-    semester: 'Semester 1',
-    section: 'A',
-    rollNumber: '',
-    admissionNumber: '',
     cgpa: '',
     parentName: '',
-    parentRelation: 'Father',
-    parentPhone: '',
-    parentOccupation: '',
-    address: '',
-    city: '',
-    state: 'Telangana',
-    pincode: ''
+    parentRelation: 'Father'
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof StudentFormData, string>>>({});
@@ -68,22 +56,11 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
         phone: student.phone || '',
         dateOfBirth: student.dateOfBirth || '',
         gender: student.gender || 'Male',
-        bloodGroup: student.bloodGroup || 'O+',
         department: student.department || 'Computer Science & Engineering',
         academicYear: student.academicYear || '1st Year',
-        semester: student.semester || 'Semester 1',
-        section: student.section || 'A',
-        rollNumber: student.rollNumber || '',
-        admissionNumber: student.admissionNumber || '',
         cgpa: student.cgpa !== undefined && student.cgpa !== null ? String(student.cgpa) : '',
         parentName: student.parentName || '',
-        parentRelation: student.parentRelation || 'Father',
-        parentPhone: student.parentPhone || '',
-        parentOccupation: student.parentOccupation || '',
-        address: student.address || '',
-        city: student.city || '',
-        state: student.state || 'Telangana',
-        pincode: student.pincode || ''
+        parentRelation: student.parentRelation || 'Father'
       });
       setErrors({});
       setActiveTab('academic');
@@ -93,7 +70,7 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
   if (!student) return null;
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -129,21 +106,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
     }
 
     // Academic
-    if (!formData.admissionNumber.trim()) {
-      newErrors.admissionNumber = 'Admission number is required';
-    } else {
-      const exists = existingStudents.some(
-        s => s.id !== student.id && s.admissionNumber.toLowerCase() === formData.admissionNumber.trim().toLowerCase()
-      );
-      if (exists) {
-        newErrors.admissionNumber = 'Admission number already belongs to another student';
-      }
-    }
-
-    if (!formData.rollNumber.trim()) {
-      newErrors.rollNumber = 'Roll number is required';
-    }
-
     if (formData.cgpa === '' || formData.cgpa === undefined) {
       newErrors.cgpa = 'CGPA is required';
     } else {
@@ -153,13 +115,19 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
       }
     }
 
+    // Guardian
+    if (!formData.parentName.trim()) {
+      newErrors.parentName = 'Parent / Guardian name is required';
+    }
+
     setErrors(newErrors);
 
-    // If active tab doesn't have the error, switch to the first tab that has an error
-    if (newErrors.admissionNumber || newErrors.rollNumber || newErrors.cgpa) {
+    if (newErrors.cgpa) {
       setActiveTab('academic');
     } else if (newErrors.firstName || newErrors.lastName || newErrors.email || newErrors.phone) {
       setActiveTab('personal');
+    } else if (newErrors.parentName) {
+      setActiveTab('contact');
     }
 
     return Object.keys(newErrors).length === 0;
@@ -199,21 +167,9 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
     '4th Year'
   ];
 
-  const semesters = [
-    'Semester 1',
-    'Semester 2',
-    'Semester 3',
-    'Semester 4',
-    'Semester 5',
-    'Semester 6',
-    'Semester 7',
-    'Semester 8'
-  ];
-
-  const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-
-  const hasAcademicError = !!(errors.admissionNumber || errors.rollNumber || errors.cgpa);
+  const hasAcademicError = !!errors.cgpa;
   const hasPersonalError = !!(errors.firstName || errors.lastName || errors.email || errors.phone);
+  const hasGuardianError = !!errors.parentName;
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -234,7 +190,7 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
                 </h2>
               </div>
               <p className="modal-subtitle">
-                ID #{student.id} • {student.admissionNumber} • Real-time PostgreSQL Update
+                ID #{student.id} • Real-time PostgreSQL Update
               </p>
             </div>
           </div>
@@ -251,7 +207,7 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
             onClick={() => setActiveTab('academic')}
           >
             <GraduationCap size={17} />
-            <span>Academic & Enrollment</span>
+            <span>Academic Details</span>
             {hasAcademicError && <AlertCircle size={14} className="text-danger" />}
           </button>
 
@@ -271,7 +227,8 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
             onClick={() => setActiveTab('contact')}
           >
             <Users size={17} />
-            <span>Guardian & Address</span>
+            <span>Parent & Guardian</span>
+            {hasGuardianError && <AlertCircle size={14} className="text-danger" />}
           </button>
         </div>
 
@@ -279,43 +236,17 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
           <div className="modal-tab-content">
             
-            {/* TAB 1: ACADEMIC & ENROLLMENT */}
+            {/* TAB 1: ACADEMIC */}
             {activeTab === 'academic' && (
               <div className="tab-pane">
                 <div className="edit-section-header">
                   <div>
                     <h3>Institutional & Academic Information</h3>
-                    <p>Manage branch allocation, roll number, semester, section, and CGPA</p>
+                    <p>Manage branch allocation, academic year, and CGPA</p>
                   </div>
                 </div>
 
                 <div className="edit-grid-2">
-                  <div className="form-group">
-                    <label className="form-label required">Admission Number</label>
-                    <input
-                      type="text"
-                      name="admissionNumber"
-                      className={`form-input ${errors.admissionNumber ? 'input-error' : ''}`}
-                      value={formData.admissionNumber}
-                      onChange={handleChange}
-                      placeholder="e.g. ADM-2024-001"
-                    />
-                    {errors.admissionNumber && <span className="error-text">{errors.admissionNumber}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label required">Roll Number</label>
-                    <input
-                      type="text"
-                      name="rollNumber"
-                      className={`form-input ${errors.rollNumber ? 'input-error' : ''}`}
-                      value={formData.rollNumber}
-                      onChange={handleChange}
-                      placeholder="e.g. 23CSE045"
-                    />
-                    {errors.rollNumber && <span className="error-text">{errors.rollNumber}</span>}
-                  </div>
-
                   <div className="form-group edit-col-span-2">
                     <label className="form-label required">Department / Branch</label>
                     <select
@@ -340,34 +271,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
                     >
                       {academicYears.map(year => (
                         <option key={year} value={year}>{year}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label required">Semester</label>
-                    <select
-                      name="semester"
-                      className="form-select"
-                      value={formData.semester}
-                      onChange={handleChange}
-                    >
-                      {semesters.map(sem => (
-                        <option key={sem} value={sem}>{sem}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label required">Section</label>
-                    <select
-                      name="section"
-                      className="form-select"
-                      value={formData.section}
-                      onChange={handleChange}
-                    >
-                      {['A', 'B', 'C', 'D'].map(sec => (
-                        <option key={sec} value={sec}>Section {sec}</option>
                       ))}
                     </select>
                   </div>
@@ -455,7 +358,7 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Date of Birth</label>
+                    <label className="form-label required">Date of Birth</label>
                     <input
                       type="date"
                       name="dateOfBirth"
@@ -466,20 +369,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Blood Group</label>
-                    <select
-                      name="bloodGroup"
-                      className="form-select"
-                      value={formData.bloodGroup}
-                      onChange={handleChange}
-                    >
-                      {bloodGroups.map(bg => (
-                        <option key={bg} value={bg}>{bg}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="form-group edit-col-span-2">
                     <label className="form-label required">Gender</label>
                     <div className="radio-group-horizontal" style={{ padding: '4px 0' }}>
                       {(['Male', 'Female', 'Other'] as Gender[]).map(g => (
@@ -504,31 +393,32 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
               </div>
             )}
 
-            {/* TAB 3: GUARDIAN & CONTACT */}
+            {/* TAB 3: PARENT / GUARDIAN */}
             {activeTab === 'contact' && (
               <div className="tab-pane">
                 <div className="edit-section-header">
                   <div>
-                    <h3>Parent / Guardian & Residential Address</h3>
-                    <p>Emergency contact records and residence location</p>
+                    <h3>Parent / Guardian Information</h3>
+                    <p>Emergency contact and family details</p>
                   </div>
                 </div>
 
                 <div className="edit-grid-2">
                   <div className="form-group">
-                    <label className="form-label">Parent / Guardian Name</label>
+                    <label className="form-label required">Parent / Guardian Name</label>
                     <input
                       type="text"
                       name="parentName"
-                      className="form-input"
+                      className={`form-input ${errors.parentName ? 'input-error' : ''}`}
                       value={formData.parentName}
                       onChange={handleChange}
                       placeholder="Full name of parent/guardian"
                     />
+                    {errors.parentName && <span className="error-text">{errors.parentName}</span>}
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Relationship</label>
+                    <label className="form-label required">Relationship</label>
                     <select
                       name="parentRelation"
                       className="form-select"
@@ -539,78 +429,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
                       <option value="Mother">Mother</option>
                       <option value="Guardian">Guardian</option>
                     </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Emergency Contact Phone</label>
-                    <input
-                      type="tel"
-                      name="parentPhone"
-                      className="form-input"
-                      value={formData.parentPhone}
-                      onChange={handleChange}
-                      placeholder="10 digit parent mobile"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Occupation</label>
-                    <input
-                      type="text"
-                      name="parentOccupation"
-                      className="form-input"
-                      value={formData.parentOccupation}
-                      onChange={handleChange}
-                      placeholder="e.g. Software Engineer, Doctor"
-                    />
-                  </div>
-
-                  <div className="form-group edit-col-span-2">
-                    <label className="form-label">Street Address</label>
-                    <input
-                      type="text"
-                      name="address"
-                      className="form-input"
-                      value={formData.address}
-                      onChange={handleChange}
-                      placeholder="House / Flat No, Street, Landmark"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">City</label>
-                    <input
-                      type="text"
-                      name="city"
-                      className="form-input"
-                      value={formData.city}
-                      onChange={handleChange}
-                      placeholder="e.g. Hyderabad"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">State</label>
-                    <input
-                      type="text"
-                      name="state"
-                      className="form-input"
-                      value={formData.state}
-                      onChange={handleChange}
-                      placeholder="e.g. Telangana"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Pincode</label>
-                    <input
-                      type="text"
-                      name="pincode"
-                      className="form-input"
-                      value={formData.pincode}
-                      onChange={handleChange}
-                      placeholder="e.g. 500081"
-                    />
                   </div>
                 </div>
               </div>

@@ -12,27 +12,16 @@ export type AcademicYear = '1st Year' | '2nd Year' | '3rd Year' | '4th Year';
 
 export interface Student {
   id: number;
-  admissionNumber: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
   dateOfBirth: string;
   gender: Gender;
-  bloodGroup: string;
   department: Department;
   academicYear: AcademicYear;
-  semester: string;
-  section: string;
-  rollNumber: string;
   parentName: string;
   parentRelation: string;
-  parentPhone: string;
-  parentOccupation: string;
-  address: string;
-  city: string;
-  state: string;
-  pincode: string;
   cgpa: number;
   joinedDate: string;
 }
@@ -44,20 +33,9 @@ export interface StudentFormData {
   phone: string;
   dateOfBirth: string;
   gender: Gender;
-  bloodGroup: string;
   department: Department;
   academicYear: AcademicYear;
-  semester: string;
-  section: string;
-  rollNumber: string;
-  admissionNumber: string;
   cgpa: string;
   parentName: string;
   parentRelation: string;
-  parentPhone: string;
-  parentOccupation: string;
-  address: string;
-  city: string;
-  state: string;
-  pincode: string;
 }

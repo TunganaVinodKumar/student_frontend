@@ -56,7 +56,7 @@ export const App: React.FC = () => {
         id: String(Date.now()),
         type: 'success',
         title: 'Registration Successful!',
-        message: `${savedStudent.firstName} ${savedStudent.lastName} (${savedStudent.admissionNumber}) saved permanently in PostgreSQL.`
+        message: `${savedStudent.firstName} ${savedStudent.lastName} saved permanently in PostgreSQL.`
       });
       setActiveTab('students');
     } catch (err: any) {
@@ -79,7 +79,7 @@ export const App: React.FC = () => {
         id: String(Date.now()),
         type: 'success',
         title: 'Student Profile Updated!',
-        message: `${savedStudent.firstName} ${savedStudent.lastName} (${savedStudent.admissionNumber}) updated successfully in PostgreSQL.`
+        message: `${savedStudent.firstName} ${savedStudent.lastName} updated successfully in PostgreSQL.`
       });
     } catch (err: any) {
       setToast({

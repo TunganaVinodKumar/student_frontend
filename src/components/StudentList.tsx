@@ -64,7 +64,6 @@ export const StudentList: React.FC<StudentListProps> = ({
             <thead>
               <tr>
                 <th>Student</th>
-                <th>Admission & Roll No</th>
                 <th>Department & Year</th>
                 <th>Contact Information</th>
                 <th>CGPA</th>
@@ -85,17 +84,9 @@ export const StudentList: React.FC<StudentListProps> = ({
                           {student.firstName} {student.lastName}
                         </span>
                         <span className="student-gender-badge">
-                          {student.gender} • Blood: {student.bloodGroup}
+                          {student.gender}
                         </span>
                       </div>
-                    </div>
-                  </td>
-
-                  {/* Admission & Roll */}
-                  <td>
-                    <div className="code-badge-group">
-                      <span className="admission-code">{student.admissionNumber}</span>
-                      <span className="roll-code">Roll: {student.rollNumber}</span>
                     </div>
                   </td>
 
@@ -104,7 +95,7 @@ export const StudentList: React.FC<StudentListProps> = ({
                     <div className="dept-cell">
                       <span className="dept-tag">{student.department}</span>
                       <span className="year-sem-text">
-                        {student.academicYear} • {student.semester} (Sec {student.section})
+                        {student.academicYear}
                       </span>
                     </div>
                   </td>

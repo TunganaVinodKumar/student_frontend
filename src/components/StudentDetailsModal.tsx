@@ -3,8 +3,8 @@ import {
   X, 
   User, 
   GraduationCap, 
-  MapPin, 
   Users, 
+  Mail,
   FileCheck2
 } from 'lucide-react';
 import type { Student } from '../types/student';
@@ -36,7 +36,7 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
                 </h2>
               </div>
               <p className="modal-subtitle">
-                {student.admissionNumber} • Roll: {student.rollNumber} • {student.department}
+                ID #{student.id} • {student.department}
               </p>
             </div>
           </div>
@@ -52,14 +52,6 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
             <div className="highlight-pill">
               <span className="highlight-label">Academic Year</span>
               <span className="highlight-val">{student.academicYear}</span>
-            </div>
-            <div className="highlight-pill">
-              <span className="highlight-label">Current Semester</span>
-              <span className="highlight-val">{student.semester}</span>
-            </div>
-            <div className="highlight-pill">
-              <span className="highlight-label">Class Section</span>
-              <span className="highlight-val">Section {student.section}</span>
             </div>
             <div className="highlight-pill">
               <span className="highlight-label">Cumulative GPA</span>
@@ -88,10 +80,6 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
                   <span className="info-value">{student.gender}</span>
                 </div>
                 <div className="info-row">
-                  <span className="info-label">Blood Group:</span>
-                  <span className="info-value">{student.bloodGroup}</span>
-                </div>
-                <div className="info-row">
                   <span className="info-label">Enrollment Date:</span>
                   <span className="info-value">{student.joinedDate}</span>
                 </div>
@@ -110,20 +98,12 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
                   <span className="info-value font-semibold">{student.department}</span>
                 </div>
                 <div className="info-row">
-                  <span className="info-label">Admission Number:</span>
-                  <span className="info-value text-primary font-mono">{student.admissionNumber}</span>
+                  <span className="info-label">Academic Year:</span>
+                  <span className="info-value">{student.academicYear}</span>
                 </div>
                 <div className="info-row">
-                  <span className="info-label">Class Roll No:</span>
-                  <span className="info-value font-mono">{student.rollNumber}</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-label">Year & Semester:</span>
-                  <span className="info-value">{student.academicYear} • {student.semester}</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-label">Section:</span>
-                  <span className="info-value">Section {student.section}</span>
+                  <span className="info-label">CGPA:</span>
+                  <span className="info-value text-primary font-mono">{student.cgpa}</span>
                 </div>
               </div>
             </div>
@@ -137,24 +117,20 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
               <div className="info-list">
                 <div className="info-row">
                   <span className="info-label">Guardian Name:</span>
-                  <span className="info-value">{student.parentName} ({student.parentRelation})</span>
+                  <span className="info-value">{student.parentName}</span>
                 </div>
                 <div className="info-row">
-                  <span className="info-label">Occupation:</span>
-                  <span className="info-value">{student.parentOccupation || 'Not Specified'}</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-label">Emergency Phone:</span>
-                  <span className="info-value text-blue">{student.parentPhone}</span>
+                  <span className="info-label">Relationship:</span>
+                  <span className="info-value">{student.parentRelation}</span>
                 </div>
               </div>
             </div>
 
-            {/* Section 4: Contact & Residential Details */}
+            {/* Section 4: Contact Details */}
             <div className="detail-section-card">
               <div className="section-title">
-                <MapPin size={18} className="text-primary" />
-                <h3>Contact & Residential Address</h3>
+                <Mail size={18} className="text-primary" />
+                <h3>Contact Information</h3>
               </div>
               <div className="info-list">
                 <div className="info-row">
@@ -164,18 +140,6 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
                 <div className="info-row">
                   <span className="info-label">Student Mobile:</span>
                   <span className="info-value">{student.phone}</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-label">Address:</span>
-                  <span className="info-value">{student.address}</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-label">City, State:</span>
-                  <span className="info-value">{student.city}, {student.state}</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-label">Postal Pincode:</span>
-                  <span className="info-value">{student.pincode}</span>
                 </div>
               </div>
             </div>

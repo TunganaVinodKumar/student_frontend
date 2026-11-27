@@ -1050,25 +1050,6 @@
   color: var(--text-secondary);
 }
 
-.code-badge-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.admission-code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--primary);
-}
-
-.roll-code {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  font-family: 'JetBrains Mono', monospace;
-}
-
 .dept-cell {
   display: flex;
   flex-direction: column;
