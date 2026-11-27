@@ -5,9 +5,9 @@ import {
   User, 
   GraduationCap, 
   Users, 
+  Mail,
   Loader2,
-  CheckCircle2,
-  AlertCircle
+  CheckCircle2
 } from 'lucide-react';
 import type { 
   Student, 
@@ -29,7 +29,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
   onClose,
   onSave
 }) => {
-  const [activeTab, setActiveTab] = useState<'academic' | 'personal' | 'contact'>('academic');
   const [formData, setFormData] = useState<StudentFormData>({
     firstName: '',
     lastName: '',
@@ -61,7 +60,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
         parentRelation: student.parentRelation || 'Father'
       });
       setErrors({});
-      setActiveTab('academic');
     }
   }, [student]);
 
@@ -81,7 +79,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
   const validate = (): boolean => {
     const newErrors: Partial<Record<keyof StudentFormData, string>> = {};
 
-    // Personal
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
     }
@@ -103,19 +100,11 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
       newErrors.phone = 'Must be exactly 10 digits';
     }
 
-    // Guardian
     if (!formData.parentName.trim()) {
       newErrors.parentName = 'Parent / Guardian name is required';
     }
 
     setErrors(newErrors);
-
-    if (newErrors.firstName || newErrors.lastName || newErrors.email || newErrors.phone) {
-      setActiveTab('personal');
-    } else if (newErrors.parentName) {
-      setActiveTab('contact');
-    }
-
     return Object.keys(newErrors).length === 0;
   };
 
@@ -152,14 +141,12 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
     '4th Year'
   ];
 
-  const hasPersonalError = !!(errors.firstName || errors.lastName || errors.email || errors.phone);
-  const hasGuardianError = !!errors.parentName;
-
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div 
         className="modal-card modal-edit-card" 
         onClick={(e) => e.stopPropagation()}
+        style={{ maxWidth: '820px' }}
       >
         {/* Modal Header */}
         <div className="modal-header">
@@ -183,223 +170,185 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
           </button>
         </div>
 
-        {/* Navigation Tabs Header */}
-        <div className="modal-tabs-header">
-          <button 
-            type="button"
-            className={`modal-tab-btn ${activeTab === 'academic' ? 'active' : ''}`}
-            onClick={() => setActiveTab('academic')}
-          >
-            <GraduationCap size={17} />
-            <span>Academic Details</span>
-          </button>
-
-          <button 
-            type="button"
-            className={`modal-tab-btn ${activeTab === 'personal' ? 'active' : ''}`}
-            onClick={() => setActiveTab('personal')}
-          >
-            <User size={17} />
-            <span>Personal Profile</span>
-            {hasPersonalError && <AlertCircle size={14} className="text-danger" />}
-          </button>
-
-          <button 
-            type="button"
-            className={`modal-tab-btn ${activeTab === 'contact' ? 'active' : ''}`}
-            onClick={() => setActiveTab('contact')}
-          >
-            <Users size={17} />
-            <span>Parent & Guardian</span>
-            {hasGuardianError && <AlertCircle size={14} className="text-danger" />}
-          </button>
-        </div>
-
         {/* Modal Form Scrollable Area */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-          <div className="modal-tab-content">
+          <div className="modal-body" style={{ overflowY: 'auto', padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             
-            {/* TAB 1: ACADEMIC */}
-            {activeTab === 'academic' && (
-              <div className="tab-pane">
-                <div className="edit-section-header">
-                  <div>
-                    <h3>Institutional & Academic Information</h3>
-                    <p>Manage branch allocation and academic year</p>
-                  </div>
+            {/* Section 1: Personal Details */}
+            <div className="form-section-card">
+              <div className="section-title">
+                <User size={18} className="text-primary" />
+                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0 }}>Personal Information</h3>
+              </div>
+              <div className="edit-grid-2" style={{ marginTop: '14px' }}>
+                <div className="form-group">
+                  <label className="form-label required">First Name</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    className={`form-input ${errors.firstName ? 'input-error' : ''}`}
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    placeholder="e.g. Aarav"
+                  />
+                  {errors.firstName && <span className="error-text">{errors.firstName}</span>}
                 </div>
 
-                <div className="edit-grid-2">
-                  <div className="form-group">
-                    <label className="form-label required">Department / Branch</label>
-                    <select
-                      name="department"
-                      className="form-select"
-                      value={formData.department}
-                      onChange={handleChange}
-                    >
-                      {departments.map(dept => (
-                        <option key={dept} value={dept}>{dept}</option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="form-group">
+                  <label className="form-label required">Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    className={`form-input ${errors.lastName ? 'input-error' : ''}`}
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    placeholder="e.g. Sharma"
+                  />
+                  {errors.lastName && <span className="error-text">{errors.lastName}</span>}
+                </div>
 
-                  <div className="form-group">
-                    <label className="form-label required">Academic Year</label>
-                    <select
-                      name="academicYear"
-                      className="form-select"
-                      value={formData.academicYear}
-                      onChange={handleChange}
-                    >
-                      {academicYears.map(year => (
-                        <option key={year} value={year}>{year}</option>
-                      ))}
-                    </select>
+                <div className="form-group">
+                  <label className="form-label required">Date of Birth</label>
+                  <input
+                    type="date"
+                    name="dateOfBirth"
+                    className="form-input"
+                    value={formData.dateOfBirth}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label required">Gender</label>
+                  <div className="radio-group-horizontal" style={{ padding: '4px 0' }}>
+                    {(['Male', 'Female', 'Other'] as Gender[]).map(g => (
+                      <label 
+                        key={g} 
+                        className={`radio-label ${formData.gender === g ? 'radio-selected' : ''}`}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <input 
+                          type="radio" 
+                          name="gender"
+                          value={g}
+                          checked={formData.gender === g}
+                          onChange={handleChange}
+                        />
+                        <span>{g}</span>
+                      </label>
+                    ))}
                   </div>
                 </div>
               </div>
-            )}
+            </div>
 
-            {/* TAB 2: PERSONAL PROFILE */}
-            {activeTab === 'personal' && (
-              <div className="tab-pane">
-                <div className="edit-section-header">
-                  <div>
-                    <h3>Student Personal Profile</h3>
-                    <p>Basic personal details, date of birth, contact details, and gender</p>
-                  </div>
+            {/* Section 2: Academic Details */}
+            <div className="form-section-card">
+              <div className="section-title">
+                <GraduationCap size={18} className="text-primary" />
+                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0 }}>Academic & Enrollment Details</h3>
+              </div>
+              <div className="edit-grid-2" style={{ marginTop: '14px' }}>
+                <div className="form-group">
+                  <label className="form-label required">Department / Branch</label>
+                  <select
+                    name="department"
+                    className="form-select"
+                    value={formData.department}
+                    onChange={handleChange}
+                  >
+                    {departments.map(dept => (
+                      <option key={dept} value={dept}>{dept}</option>
+                    ))}
+                  </select>
                 </div>
 
-                <div className="edit-grid-2">
-                  <div className="form-group">
-                    <label className="form-label required">First Name</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      className={`form-input ${errors.firstName ? 'input-error' : ''}`}
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      placeholder="e.g. Aarav"
-                    />
-                    {errors.firstName && <span className="error-text">{errors.firstName}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label required">Last Name</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      className={`form-input ${errors.lastName ? 'input-error' : ''}`}
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      placeholder="e.g. Sharma"
-                    />
-                    {errors.lastName && <span className="error-text">{errors.lastName}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label required">Email Address</label>
-                    <input
-                      type="email"
-                      name="email"
-                      className={`form-input ${errors.email ? 'input-error' : ''}`}
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="student@college.edu"
-                    />
-                    {errors.email && <span className="error-text">{errors.email}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label required">Mobile Number</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      className={`form-input ${errors.phone ? 'input-error' : ''}`}
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder="10 digit mobile number"
-                    />
-                    {errors.phone && <span className="error-text">{errors.phone}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label required">Date of Birth</label>
-                    <input
-                      type="date"
-                      name="dateOfBirth"
-                      className="form-input"
-                      value={formData.dateOfBirth}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label required">Gender</label>
-                    <div className="radio-group-horizontal" style={{ padding: '4px 0' }}>
-                      {(['Male', 'Female', 'Other'] as Gender[]).map(g => (
-                        <label 
-                          key={g} 
-                          className={`radio-label ${formData.gender === g ? 'radio-selected' : ''}`}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          <input 
-                            type="radio" 
-                            name="gender"
-                            value={g}
-                            checked={formData.gender === g}
-                            onChange={handleChange}
-                          />
-                          <span>{g}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
+                <div className="form-group">
+                  <label className="form-label required">Academic Year</label>
+                  <select
+                    name="academicYear"
+                    className="form-select"
+                    value={formData.academicYear}
+                    onChange={handleChange}
+                  >
+                    {academicYears.map(year => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
-            )}
+            </div>
 
-            {/* TAB 3: PARENT / GUARDIAN */}
-            {activeTab === 'contact' && (
-              <div className="tab-pane">
-                <div className="edit-section-header">
-                  <div>
-                    <h3>Parent / Guardian Information</h3>
-                    <p>Emergency contact and family details</p>
-                  </div>
+            {/* Section 3: Parent / Guardian */}
+            <div className="form-section-card">
+              <div className="section-title">
+                <Users size={18} className="text-primary" />
+                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0 }}>Parent & Guardian Information</h3>
+              </div>
+              <div className="edit-grid-2" style={{ marginTop: '14px' }}>
+                <div className="form-group">
+                  <label className="form-label required">Parent / Guardian Name</label>
+                  <input
+                    type="text"
+                    name="parentName"
+                    className={`form-input ${errors.parentName ? 'input-error' : ''}`}
+                    value={formData.parentName}
+                    onChange={handleChange}
+                    placeholder="Full name of parent/guardian"
+                  />
+                  {errors.parentName && <span className="error-text">{errors.parentName}</span>}
                 </div>
 
-                <div className="edit-grid-2">
-                  <div className="form-group">
-                    <label className="form-label required">Parent / Guardian Name</label>
-                    <input
-                      type="text"
-                      name="parentName"
-                      className={`form-input ${errors.parentName ? 'input-error' : ''}`}
-                      value={formData.parentName}
-                      onChange={handleChange}
-                      placeholder="Full name of parent/guardian"
-                    />
-                    {errors.parentName && <span className="error-text">{errors.parentName}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label required">Relationship</label>
-                    <select
-                      name="parentRelation"
-                      className="form-select"
-                      value={formData.parentRelation}
-                      onChange={handleChange}
-                    >
-                      <option value="Father">Father</option>
-                      <option value="Mother">Mother</option>
-                      <option value="Guardian">Guardian</option>
-                    </select>
-                  </div>
+                <div className="form-group">
+                  <label className="form-label required">Relationship</label>
+                  <select
+                    name="parentRelation"
+                    className="form-select"
+                    value={formData.parentRelation}
+                    onChange={handleChange}
+                  >
+                    <option value="Father">Father</option>
+                    <option value="Mother">Mother</option>
+                    <option value="Guardian">Guardian</option>
+                  </select>
                 </div>
               </div>
-            )}
+            </div>
+
+            {/* Section 4: Contact Information */}
+            <div className="form-section-card">
+              <div className="section-title">
+                <Mail size={18} className="text-primary" />
+                <h3 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0 }}>Contact Information</h3>
+              </div>
+              <div className="edit-grid-2" style={{ marginTop: '14px' }}>
+                <div className="form-group">
+                  <label className="form-label required">Email Address</label>
+                  <input
+                    type="email"
+                    name="email"
+                    className={`form-input ${errors.email ? 'input-error' : ''}`}
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="student@college.edu"
+                  />
+                  {errors.email && <span className="error-text">{errors.email}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label required">Mobile Number</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    className={`form-input ${errors.phone ? 'input-error' : ''}`}
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="10 digit mobile number"
+                  />
+                  {errors.phone && <span className="error-text">{errors.phone}</span>}
+                </div>
+              </div>
+            </div>
 
           </div>
 

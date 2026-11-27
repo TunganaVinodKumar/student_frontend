@@ -47,18 +47,6 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
 
         {/* Modal Body / Sections */}
         <div className="modal-body">
-          {/* Top Quick Highlights Banner */}
-          <div className="modal-highlights-grid">
-            <div className="highlight-pill">
-              <span className="highlight-label">Department</span>
-              <span className="highlight-val text-primary-strong">{student.department}</span>
-            </div>
-            <div className="highlight-pill">
-              <span className="highlight-label">Academic Year</span>
-              <span className="highlight-val">{student.academicYear}</span>
-            </div>
-          </div>
-
           <div className="modal-sections-grid">
             {/* Section 1: Personal Details */}
             <div className="detail-section-card">
