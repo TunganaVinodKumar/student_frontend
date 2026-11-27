@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
-  Search, 
-  Filter, 
   Eye, 
   Pencil,
   Trash2, 
-  RefreshCw, 
   UserPlus, 
   Mail, 
   Phone, 
@@ -29,121 +26,14 @@ export const StudentList: React.FC<StudentListProps> = ({
   onEditStudent,
   onDeleteStudent,
   onNavigateToRegister,
-  onRefresh,
   isLoading = false
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDept, setSelectedDept] = useState<string>('ALL');
-  const [selectedYear, setSelectedYear] = useState<string>('ALL');
-
-  // Filter students by search term, department, and academic year
-  const filteredStudents = students.filter(student => {
-    const matchesSearch = 
-      student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.admissionNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.rollNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.email.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesDept = selectedDept === 'ALL' || student.department === selectedDept;
-    const matchesYear = selectedYear === 'ALL' || student.academicYear === selectedYear;
-
-    return matchesSearch && matchesDept && matchesYear;
-  });
-
-  // Departments for dropdown filter
-  const departments = [
-    'Computer Science & Engineering',
-    'Electronics & Communication',
-    'Electrical & Electronics',
-    'Mechanical Engineering',
-    'Civil Engineering',
-    'Information Technology'
-  ];
-
   return (
     <div className="students-container">
-      {/* Top Action & Search Bar */}
-      <div className="list-controls-card">
-        <div className="controls-row">
-          {/* Search Field */}
-          <div className="search-input-wrapper">
-            <Search size={18} className="search-icon" />
-            <input 
-              type="text" 
-              placeholder="Search by student name, admission number, roll no, or email..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-field"
-            />
-            {searchTerm && (
-              <button 
-                className="clear-search-btn" 
-                onClick={() => setSearchTerm('')}
-              >
-                ✕
-              </button>
-            )}
-          </div>
-
-          {/* Department Filter */}
-          <div className="filter-group">
-            <Filter size={16} className="filter-icon" />
-            <select 
-              className="filter-select"
-              value={selectedDept}
-              onChange={(e) => setSelectedDept(e.target.value)}
-            >
-              <option value="ALL">All Departments</option>
-              {departments.map(d => (
-                <option key={d} value={d}>{d}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Year Filter */}
-          <div className="filter-group">
-            <GraduationCap size={16} className="filter-icon" />
-            <select 
-              className="filter-select"
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-            >
-              <option value="ALL">All Academic Years</option>
-              <option value="1st Year">1st Year</option>
-              <option value="2nd Year">2nd Year</option>
-              <option value="3rd Year">3rd Year</option>
-              <option value="4th Year">4th Year</option>
-            </select>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="list-action-buttons">
-            <button 
-              className="btn btn-outline" 
-              onClick={onRefresh}
-              title="Refresh student list from PostgreSQL"
-              disabled={isLoading}
-            >
-              <RefreshCw size={16} className={isLoading ? 'spinning' : ''} />
-              <span>Refresh</span>
-            </button>
-
-            <button 
-              className="btn btn-primary" 
-              onClick={onNavigateToRegister}
-            >
-              <UserPlus size={16} />
-              <span>Add Student</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Student Count Summary Bar */}
       <div className="results-summary-bar">
         <span className="results-count">
-          Showing <strong>{filteredStudents.length}</strong> of <strong>{students.length}</strong> registered students in PostgreSQL
+          Total <strong>{students.length}</strong> registered students in PostgreSQL
         </span>
       </div>
 
@@ -153,31 +43,18 @@ export const StudentList: React.FC<StudentListProps> = ({
           <div className="loading-spinner"></div>
           <p>Syncing with PostgreSQL database...</p>
         </div>
-      ) : filteredStudents.length === 0 ? (
+      ) : students.length === 0 ? (
         /* Empty / No Results State */
         <div className="empty-state-box">
           <div className="empty-state-icon">
             <GraduationCap size={48} />
           </div>
           <h3>No Student Records Found</h3>
-          <p>
-            {searchTerm || selectedDept !== 'ALL' || selectedYear !== 'ALL'
-              ? 'No students matched your active search filters. Try clearing filters.'
-              : 'The PostgreSQL database currently has 0 student records.'}
-          </p>
+          <p>The PostgreSQL database currently has 0 student records.</p>
           <div className="empty-state-actions">
-            {(searchTerm || selectedDept !== 'ALL' || selectedYear !== 'ALL') ? (
-              <button 
-                className="btn btn-secondary" 
-                onClick={() => { setSearchTerm(''); setSelectedDept('ALL'); setSelectedYear('ALL'); }}
-              >
-                Clear All Filters
-              </button>
-            ) : (
-              <button className="btn btn-primary" onClick={onNavigateToRegister}>
-                <UserPlus size={16} /> Register First Student
-              </button>
-            )}
+            <button className="btn btn-primary" onClick={onNavigateToRegister}>
+              <UserPlus size={16} /> Register First Student
+            </button>
           </div>
         </div>
       ) : (
@@ -195,7 +72,7 @@ export const StudentList: React.FC<StudentListProps> = ({
               </tr>
             </thead>
             <tbody>
-              {filteredStudents.map(student => (
+              {students.map(student => (
                 <tr key={student.id} className="student-row">
                   {/* Student Name & Avatar */}
                   <td>
