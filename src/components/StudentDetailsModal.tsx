@@ -50,12 +50,12 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
           {/* Top Quick Highlights Banner */}
           <div className="modal-highlights-grid">
             <div className="highlight-pill">
-              <span className="highlight-label">Academic Year</span>
-              <span className="highlight-val">{student.academicYear}</span>
+              <span className="highlight-label">Department</span>
+              <span className="highlight-val text-primary-strong">{student.department}</span>
             </div>
             <div className="highlight-pill">
-              <span className="highlight-label">Cumulative GPA</span>
-              <span className="highlight-val text-primary-strong">{student.cgpa} / 10.0</span>
+              <span className="highlight-label">Academic Year</span>
+              <span className="highlight-val">{student.academicYear}</span>
             </div>
           </div>
 
@@ -100,10 +100,6 @@ export const StudentDetailsModal: React.FC<StudentDetailsModalProps> = ({
                 <div className="info-row">
                   <span className="info-label">Academic Year:</span>
                   <span className="info-value">{student.academicYear}</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-label">CGPA:</span>
-                  <span className="info-value text-primary font-mono">{student.cgpa}</span>
                 </div>
               </div>
             </div>

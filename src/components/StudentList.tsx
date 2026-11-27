@@ -66,7 +66,6 @@ export const StudentList: React.FC<StudentListProps> = ({
                 <th>Student</th>
                 <th>Department & Year</th>
                 <th>Contact Information</th>
-                <th>CGPA</th>
                 <th className="text-right">Actions</th>
               </tr>
             </thead>
@@ -110,11 +109,6 @@ export const StudentList: React.FC<StudentListProps> = ({
                         <Phone size={13} className="text-muted" /> {student.phone}
                       </span>
                     </div>
-                  </td>
-
-                  {/* CGPA */}
-                  <td>
-                    <span className="cgpa-pill">{student.cgpa?.toFixed(1) || '0.0'}</span>
                   </td>
 
                   {/* Actions */}

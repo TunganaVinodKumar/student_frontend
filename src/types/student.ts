@@ -22,7 +22,6 @@ export interface Student {
   academicYear: AcademicYear;
   parentName: string;
   parentRelation: string;
-  cgpa: number;
   joinedDate: string;
 }
 
@@ -35,7 +34,6 @@ export interface StudentFormData {
   gender: Gender;
   department: Department;
   academicYear: AcademicYear;
-  cgpa: string;
   parentName: string;
   parentRelation: string;
 }

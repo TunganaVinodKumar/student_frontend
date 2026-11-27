@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { 
   UserPlus, 
-  RotateCcw, 
   ShieldCheck, 
   Send
 } from 'lucide-react';
@@ -22,7 +21,6 @@ const INITIAL_FORM_DATA: StudentFormData = {
   gender: 'Male',
   department: 'Computer Science & Engineering',
   academicYear: '1st Year',
-  cgpa: '',
   parentName: '',
   parentRelation: 'Father'
 };
@@ -62,16 +60,6 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
     // Last Name
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Last name is required';
-    }
-
-    // CGPA Validation
-    if (!formData.cgpa.trim()) {
-      newErrors.cgpa = 'CGPA is required';
-    } else {
-      const cgpaVal = parseFloat(formData.cgpa);
-      if (isNaN(cgpaVal) || cgpaVal < 0 || cgpaVal > 10) {
-        newErrors.cgpa = 'CGPA must be between 0.0 and 10.0';
-      }
     }
 
     // Date of Birth
@@ -123,7 +111,6 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
         gender: formData.gender,
         department: formData.department,
         academicYear: formData.academicYear,
-        cgpa: parseFloat(formData.cgpa),
         parentName: formData.parentName.trim(),
         parentRelation: formData.parentRelation,
         joinedDate: new Date().toISOString().split('T')[0]
@@ -167,17 +154,6 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
               Complete the form to enroll a student record into the institutional database.
             </p>
           </div>
-        </div>
-
-        <div className="reg-header-actions">
-          <button 
-            type="button" 
-            className="btn btn-outline"
-            onClick={() => { setFormData(INITIAL_FORM_DATA); setErrors({}); }}
-          >
-            <RotateCcw size={16} />
-            <span>Reset Form</span>
-          </button>
         </div>
       </div>
 
@@ -295,24 +271,6 @@ export const StudentRegistration: React.FC<StudentRegistrationProps> = ({
                   <option key={y} value={y}>{y}</option>
                 ))}
               </select>
-            </div>
-
-            {/* CGPA Input Field */}
-            <div className="form-group">
-              <label className="form-label required">Cumulative CGPA</label>
-              <input 
-                type="number" 
-                name="cgpa"
-                step="0.01"
-                min="0"
-                max="10"
-                placeholder="e.g. 8.75"
-                value={formData.cgpa}
-                onChange={handleChange}
-                className={`form-input ${errors.cgpa ? 'input-error' : ''}`}
-              />
-              {errors.cgpa && <span className="error-text">{errors.cgpa}</span>}
-              <span className="field-hint">Scale from 0.00 to 10.00</span>
             </div>
           </div>
         </div>

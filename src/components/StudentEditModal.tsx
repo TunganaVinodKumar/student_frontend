@@ -39,7 +39,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
     gender: 'Male',
     department: 'Computer Science & Engineering',
     academicYear: '1st Year',
-    cgpa: '',
     parentName: '',
     parentRelation: 'Father'
   });
@@ -58,7 +57,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
         gender: student.gender || 'Male',
         department: student.department || 'Computer Science & Engineering',
         academicYear: student.academicYear || '1st Year',
-        cgpa: student.cgpa !== undefined && student.cgpa !== null ? String(student.cgpa) : '',
         parentName: student.parentName || '',
         parentRelation: student.parentRelation || 'Father'
       });
@@ -105,16 +103,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
       newErrors.phone = 'Must be exactly 10 digits';
     }
 
-    // Academic
-    if (formData.cgpa === '' || formData.cgpa === undefined) {
-      newErrors.cgpa = 'CGPA is required';
-    } else {
-      const parsedCgpa = parseFloat(formData.cgpa);
-      if (isNaN(parsedCgpa) || parsedCgpa < 0 || parsedCgpa > 10) {
-        newErrors.cgpa = 'CGPA must be between 0.0 and 10.0';
-      }
-    }
-
     // Guardian
     if (!formData.parentName.trim()) {
       newErrors.parentName = 'Parent / Guardian name is required';
@@ -122,9 +110,7 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
 
     setErrors(newErrors);
 
-    if (newErrors.cgpa) {
-      setActiveTab('academic');
-    } else if (newErrors.firstName || newErrors.lastName || newErrors.email || newErrors.phone) {
+    if (newErrors.firstName || newErrors.lastName || newErrors.email || newErrors.phone) {
       setActiveTab('personal');
     } else if (newErrors.parentName) {
       setActiveTab('contact');
@@ -140,8 +126,7 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
     setIsSubmitting(true);
     try {
       await onSave(student.id, {
-        ...formData,
-        cgpa: parseFloat(formData.cgpa)
+        ...formData
       });
       onClose();
     } catch (err) {
@@ -167,7 +152,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
     '4th Year'
   ];
 
-  const hasAcademicError = !!errors.cgpa;
   const hasPersonalError = !!(errors.firstName || errors.lastName || errors.email || errors.phone);
   const hasGuardianError = !!errors.parentName;
 
@@ -208,7 +192,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
           >
             <GraduationCap size={17} />
             <span>Academic Details</span>
-            {hasAcademicError && <AlertCircle size={14} className="text-danger" />}
           </button>
 
           <button 
@@ -242,12 +225,12 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
                 <div className="edit-section-header">
                   <div>
                     <h3>Institutional & Academic Information</h3>
-                    <p>Manage branch allocation, academic year, and CGPA</p>
+                    <p>Manage branch allocation and academic year</p>
                   </div>
                 </div>
 
                 <div className="edit-grid-2">
-                  <div className="form-group edit-col-span-2">
+                  <div className="form-group">
                     <label className="form-label required">Department / Branch</label>
                     <select
                       name="department"
@@ -273,22 +256,6 @@ export const StudentEditModal: React.FC<StudentEditModalProps> = ({
                         <option key={year} value={year}>{year}</option>
                       ))}
                     </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label required">Cumulative GPA (0.0 - 10.0)</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      max="10"
-                      name="cgpa"
-                      className={`form-input ${errors.cgpa ? 'input-error' : ''}`}
-                      value={formData.cgpa}
-                      onChange={handleChange}
-                      placeholder="e.g. 8.5"
-                    />
-                    {errors.cgpa && <span className="error-text">{errors.cgpa}</span>}
                   </div>
                 </div>
               </div>
