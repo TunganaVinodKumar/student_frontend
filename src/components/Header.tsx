@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface HeaderProps {
-  activeTab: string;
+  activeTab: 'students' | 'register';
   totalStudents?: number;
 }
 
@@ -11,8 +11,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab }) => {
       <div className="header-left">
         <div>
           <h1 className="page-title">
-            {activeTab === 'dashboard' && 'Academic Dashboard'}
-            {activeTab === 'students' && 'All Students'}
+            {activeTab === 'students' && 'Student Dashboard'}
             {activeTab === 'register' && 'New Student Registration'}
           </h1>
           <p className="page-subtitle">

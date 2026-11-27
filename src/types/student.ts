@@ -61,10 +61,3 @@ export interface StudentFormData {
   state: string;
   pincode: string;
 }
-
-export interface DashboardStats {
-  totalStudents: number;
-  departmentsCount: number;
-  newAdmissionsCount: number;
-  departmentDistribution: { name: string; count: number; percentage: number }[];
-}

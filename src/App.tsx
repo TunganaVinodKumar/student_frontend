@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
-import { Dashboard } from './components/Dashboard';
 import { StudentList } from './components/StudentList';
 import { StudentDetailsModal } from './components/StudentDetailsModal';
 import { StudentEditModal } from './components/StudentEditModal';
@@ -18,7 +17,7 @@ import {
 import './App.css';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'students' | 'register'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'students' | 'register'>('students');
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
@@ -134,15 +133,6 @@ export const App: React.FC = () => {
         />
 
         <main className="app-content-viewport">
-          {activeTab === 'dashboard' && (
-            <Dashboard 
-              students={students}
-              onNavigateToStudents={() => setActiveTab('students')}
-              onNavigateToRegister={() => setActiveTab('register')}
-              onViewStudentDetails={(student) => setSelectedStudent(student)}
-            />
-          )}
-
           {activeTab === 'students' && (
             <StudentList 
               students={students}

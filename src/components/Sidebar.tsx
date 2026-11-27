@@ -1,14 +1,13 @@
 import React from 'react';
 import { 
   LayoutDashboard, 
-  Users, 
   UserPlus, 
   GraduationCap
 } from 'lucide-react';
 
 interface SidebarProps {
-  activeTab: 'dashboard' | 'students' | 'register';
-  setActiveTab: (tab: 'dashboard' | 'students' | 'register') => void;
+  activeTab: 'students' | 'register';
+  setActiveTab: (tab: 'students' | 'register') => void;
   studentCount: number;
 }
 
@@ -33,19 +32,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="nav-section-label">MAIN NAVIGATION</div>
 
         <button 
-          className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
-          onClick={() => setActiveTab('dashboard')}
-        >
-          <LayoutDashboard size={20} />
-          <span className="nav-label">Dashboard</span>
-        </button>
-
-        <button 
           className={`nav-item ${activeTab === 'students' ? 'active' : ''}`}
           onClick={() => setActiveTab('students')}
         >
-          <Users size={20} />
-          <span className="nav-label">All Students</span>
+          <LayoutDashboard size={20} />
+          <span className="nav-label">Student Dashboard</span>
           <span className="nav-count-badge">{studentCount}</span>
         </button>
 
